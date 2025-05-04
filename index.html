@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abacus Quiz</title>
+    <title>Abacus Quiz Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://apis.google.com/js/api.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -19,611 +18,116 @@
             padding: 20px;
             text-align: center;
         }
-        .question-container {
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: white;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+        .heading {
+            font-size: 2.25rem; /* slightly larger heading */
+            font-weight: 700;  /* make the heading bold */
+            color: #4f46e5; /* a nice purple color */
+            margin-bottom: 2rem; /* increased margin below heading */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* subtle text shadow */
         }
-        .question-text {
-            font-size: 1.25rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-            color: #1e293b;
-        }
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-        .option {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            border: 1px solid #d1d5db;
-            background-color: #f9fafb;
-            color: #1f2937;
-            cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-            margin-bottom: 0.5rem;
-            width: 100%;
-            text-align: left;
-        }
-        .option:hover {
-            background-color: #eff6ff;
-            border-color: #60a5fa;
-            color: #1d4ed8;
-        }
-        .option input[type="radio"] {
-            margin-right: 0.5rem;
-        }
-        .name-input-container {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .name-input-container label {
-            display: block;
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: #374151;
-        }
-        .name-input-container input[type="text"] {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            border: 1px solid #d1d5db;
-            font-size: 1rem;
-            color: #1f2937;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-        .name-input-container input[type="text"]:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
-        .instructions-container {
-            margin-bottom: 20px;
-            padding: 1rem;
-            border: 1px solid #f9a8d4;
-            border-radius: 0.5rem;
-            background-color: #fde6f8;
-            color: #831843;
-        }
-        .instructions-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: #be123c;
-        }
-        .start-quiz-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
-            background-color: #3b82f6;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            border: none;
-            margin-top: 1rem;
-        }
-        .start-quiz-button:hover {
-            background-color: #2563eb;
-        }
-        .submit-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
-            background-color: #3b82f6;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            border: none;
-            margin-top: 1rem;
-        }
-        .submit-button:hover {
-            background-color: #2563eb;
-        }
-        #results-container {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border: 1px solid #6ee7b7;
-            border-radius: 0.5rem;
-            background-color: #f0fdf4;
-            color: #15803d;
-        }
-        #results-container h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #16a34a;
-        }
-        #results-container p {
+        .description {
             font-size: 1.1rem;
-            margin-bottom: 0.75rem;
-        }
-        #results-container button {
-            margin-top: 1rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
-            background-color: #4ade80;
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            border: none;
-        }
-        #results-container button:hover {
-            background-color: #22c55e;
-        }
-        .hide {
-            display: none;
-        }
-        .question-number {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #4b5563;
-            margin-bottom: 0.5rem;
-        }
-        .next-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
-            background-color: #f59e0b;
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            border: none;
-            margin-top: 1rem;
-        }
-        .next-button:hover {
-            background-color: #ed8936;
-        }
-        .orange-label {
-            color: #f59e0b;
-        }
-        #timer-container {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #dc2626;
-            margin-bottom: 1rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.7; /* improved line height for better readability */
         }
         #file-select-container {
-            margin-bottom: 20px;
-            text-align: left;
+            margin-bottom: 2rem;
+            text-align: center; /* center the dropdown */
         }
         #file-select-container label {
             display: block;
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
+            font-size: 1.2rem; /* increased label font size */
+            font-weight: 600;
+            margin-bottom: 0.75rem; /* increased margin below label */
             color: #374151;
+            text-align: left; /* align label to the left */
         }
         #file-dropdown {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
+            width: 100%; /* make dropdown full width */
+            padding: 0.8rem 1rem; /* slightly increased padding */
+            border-radius: 0.5rem; /* more rounded corners */
             border: 1px solid #d1d5db;
-            font-size: 1rem;
+            font-size: 1.1rem; /* increased font size in dropdown */
             color: #1f2937;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* more subtle shadow */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* smooth transition */
         }
         #file-dropdown:focus {
             outline: none;
             border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); /* more pronounced focus shadow */
         }
+        #load-quiz-button {
+            padding: 0.8rem 2rem; /* increased button padding */
+            border-radius: 0.5rem; /* more rounded corners */
+            background-color: #4f46e5; /* same purple as heading */
+            color: white;
+            font-size: 1.1rem; /* increased font size */
+            font-weight: 600; /* make button text bold */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* added transform and shadow */
+            border: none;
+            margin-top: 1.5rem; /* increased margin above button */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* add shadow to button */
+        }
+        #load-quiz-button:hover {
+            background-color: #4338ca; /* slightly darker purple on hover */
+            transform: translateY(-2px); /* slight lift on hover */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* increase shadow on hover */
+        }
+        #load-quiz-button:active {
+            background-color: #3730a3; /* even darker purple on active */
+            transform: translateY(0); /* no lift on active */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* smaller shadow on active */
+        }
+
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="container">
-        <h1 class="text-2xl font-semibold text-gray-800 mb-4">Zaydan - Abacus - Level - 1A Quiz</h1>
+        <h1 class="heading">Welcome to the Abacus Quiz</h1>
+        <p class="description">Select a quiz to begin:</p>
 
-        <div class="name-input-container" id="name-container">
-            <label for="name-input">Please enter your name:</label>
-            <input type="text" id="name-input" placeholder="Your Name" required>
-        </div>
         <div id="file-select-container">
-            <label for="file-dropdown">Select a data file:</label>
+            <label for="file-dropdown">Choose a Quiz:</label>
             <select id="file-dropdown">
-                <option value="1YPXqHTITg6-ZH3tGJCY9a5Dto3GGCtLv">Practice Paper 01</option>
-                <option value="1bgBN9WaGfSsK4bNtG6p_-QmmUt9i1ZyV">Practice Paper 02</option>
-                <option value="1fSGdXst1H051jdFPB8YZj397vrVA4Jjr">Practice Paper 03</option>
+                <option value="Zaydan_Abacus_P1.html">Practice Paper P1</option>
+                <option value="Zaydan_Abacus_P2.html">Practice Paper P2</option>
+                <option value="Zaydan_Abacus_P3.html">Practice Paper P3</option>
+                <option value="Zaydan_Abacus_P4.html">Practice Paper P4</option>
+                <option value="Zaydan_Abacus_P5.html">Practice Paper P5</option>
+                <option value="Zaydan_Abacus_P6.html">Practice Paper P6</option>
+                <option value="Zaydan_Abacus_P7.html">Practice Paper P7</option>
+                <option value="Zaydan_Abacus_P8.html">Practice Paper P8</option>
+                <option value="Zaydan_Abacus_P9.html">Practice Paper P9</option>
+                <option value="Zaydan_Abacus_P10.html">Practice Paper P10</option>
+                <option value="Zaydan_Abacus_P11.html">Practice Paper P11</option>
+                <option value="Zaydan_Abacus_P12.html">Practice Paper P12</option>
+                <option value="Zaydan_Abacus_P13.html">Practice Paper P13</option>
+                <option value="Zaydan_Abacus_P14.html">Practice Paper P14</option>
+                <option value="Zaydan_Abacus_P15.html">Practice Paper P15</option>
+                <option value="Zaydan_Abacus_P16.html">Practice Paper P16</option>
+                <option value="Zaydan_Abacus_P17.html">Practice Paper P17</option>
+                <option value="Zaydan_Abacus_P18.html">Practice Paper P18</option>
+                <option value="Zaydan_Abacus_P19.html">Practice Paper P19</option>
+                <option value="Zaydan_Abacus_P20.html">Practice Paper P20</option>
             </select>
         </div>
 
-        <button type="button" id="start-quiz-button" class="start-quiz-button mt-4">Start Quiz</button>
-
-        <div class="instructions-container" id="instructions-container">
-            <h2 class="instructions-title">Instructions</h2>
-            <p>This quiz has a time limit of 15 minutes. Please answer all questions.</p>
-        </div>
-
-        <div id="timer-container" class="hide">
-            Time Remaining: <span id="timer">15:00</span>
-        </div>
-
-        <form id="quiz-form" class="hide">
-            <div id="questions-container">
-            </div>
-            <button type="submit" class="submit-button hide">Submit Quiz</button>
-        </form>
-
-        <div id="results-container" class="hide">
-            <h2>Quiz Results</h2>
-            <p>Name: <span id="results-name"></span></p>
-            <p>Score: <span id="results-score"></span></p>
-            <p>Time Taken: <span id="results-time"></span> minutes</p>
-            <p>Submission Date/Time: <span id="results-submission-time"></span></p>
-            <button id="retake-quiz">Retake Quiz</button>
-        </div>
+        <button id="load-quiz-button">Start Quiz</button>
     </div>
 
     <script>
-        const quizData = []; // Array to hold questions loaded from the file
-
-        const nameContainer = document.getElementById('name-container');
-        const quizForm = document.getElementById('quiz-form');
-        const questionsContainer = document.getElementById('questions-container');
-        const resultsContainer = document.getElementById('results-container');
-        const resultsNameDisplay = document.getElementById('results-name');
-        const resultsScoreDisplay = document.getElementById('results-score');
-        const resultsTimeDisplay = document.getElementById('results-time');
-        const retakeQuizButton = document.getElementById('retake-quiz');
-        const instructionsContainer = document.getElementById('instructions-container');
-        const startQuizButton = document.getElementById('start-quiz-button');
-        const timerDisplay = document.getElementById('timer');
-        const timerContainer = document.getElementById('timer-container');
-        const submitButton = document.querySelector('.submit-button');
-        const resultsSubmissionTimeDisplay = document.getElementById('results-submission-time');
         const fileDropdown = document.getElementById('file-dropdown');
+        const loadQuizButton = document.getElementById('load-quiz-button');
 
-
-        let startTime;
-        let endTime;
-        let userName = "";
-        let userAnswers = [];
-        let currentQuestionIndex = 0;
-        let timeRemaining = 900; // 15 minutes in seconds
-        const filename = "Result/quiz_results.txt";
-        let fileContent = "";
-        let timerInterval;
-        let selectedFileId; // Changed to store file ID
-        // --- Configuration ---
-        const CLIENT_ID = "685076487233-k1euafudur9a6c9vm561la88f1vkjv8f.apps.googleusercontent.com"; // Replace with your Google Client ID
-        const SCOPES = ["https://www.googleapis.com/auth/drive.readonly"];
-        // const FOLDER_ID = "YOUR_FOLDER_ID"; // No longer needed
-        const FILE_IDS = { // Define file IDs directly
-            "Practice Paper 01": "1YPXqHTITg6-ZH3tGJCY9a5Dto3GGCtLv",
-            "Practice Paper 02": "1bgBN9WaGfSsK4bNtG6p_-QmmUt9i1ZyV",
-            "Practice Paper 03": "1fSGdXst1H051jdFPB8YZj397vrVA4Jjr"
-        };
-
-        // --- Global Variables ---
-        let fileContents = {}; // Store file contents with filenames as keys
-        let gapiInitialized = false; // Flag to track gapi initialization
-
-
-        /**
-         * Initializes the Google API client.
-         */
-        function initClient() {
-            if (gapiInitialized) return; // Prevent re-initialization
-
-            gapi.load('client', () => {
-                gapi.client.init({
-                    clientId: CLIENT_ID,
-                    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-                    scope: SCOPES.join(' ')
-                }).then(() => {
-                    // Check if the user is signed in.
-                    gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
-                    updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-                    gapiInitialized = true; // Set the flag
-                }).catch(error => {
-                    console.error("Error initializing gapi client:", error);
-                    questionsContainer.innerHTML = "Error initializing Google API client. Check console."; // Changed to questionsContainer
-                    gapiInitialized = false;
-                });
-            });
-        }
-
-        /**
-         * Updates the UI based on the user's sign-in status.
-         */
-        function updateSignInStatus(isSignedIn) {
-            if (isSignedIn) {
-                // User is signed in, no need to list,  load the file.
-                // listFiles();
-                console.log("User is signed in"); // Added
-                //  If signed in, load the file.
-                loadFilesContent(selectedFileId);
-            } else {
-                // User is signed out, show the sign-in button.
-                // document.getElementById('sign-in-button').style.display = 'block';
-                // document.getElementById('content').style.display = 'none';
-                console.log("User is signed out"); // Added
-                //  Removed the sign-in button.  We'll handle auth implicitly.
-                gapi.auth2.getAuthInstance().signIn().then(() => {
-                    console.log("Sign in successful after status check.");
-                    loadFilesContent(selectedFileId); // Load after successful sign-in
-                }).catch(error => {
-                    console.error("Error during sign-in:", error);
-                    questionsContainer.innerHTML = "Error signing in. Check console.";
-                });
-            }
-        }
-
-
-
-        /**
-         * Handles sign-in to Google.  // Removed the handleSignIn function
-         */
-        /*function handleSignIn(event) {
-            gapi.auth2.getAuthInstance().signIn().then(() => {
-                // Sign-in successful, update UI.
-                // listFiles();
-            }).catch(error => {
-                console.error("Error signing in:", error);
-                questionsContainer.innerHTML = "Error signing in. Check console."; // Changed to questionsContainer
-            });
-        }*/
-
-        /**
-         * Lists files in the specified Google Drive folder.
-         */
-        function listFiles() {
-            // document.getElementById('sign-in-button').style.display = 'none';
-            // document.getElementById('content').style.display = 'block';
-            /*gapi.client.drive.files.list({
-                q: `'${FOLDER_ID}' in parents and mimeType = 'text/plain'`,
-                fields: 'nextPageToken, files(id, name)'
-            }).then(response => {
-                const files = response.result.files;
-                if (files && files.length > 0) {
-                    populateFileDropdown(files);
-                    // Load the content of each file.
-                    // loadFilesContent(files); // Removed this line
-                } else {
-                    document.getElementById('content').innerHTML = "No text files found in the specified folder.";
-                }
-            }).catch(error => {
-                console.error("Error listing files:", error);
-                document.getElementById('content').innerHTML = "Error listing files. Check console.";
-            });*/
-        }
-
-        function populateFileDropdown() {
-            const dropdown = document.getElementById('file-dropdown');
-            dropdown.innerHTML = ''; // Clear existing options
-
-            for (const [paperName, fileId] of Object.entries(FILE_IDS)) {
-                const option = document.createElement('option');
-                option.value = fileId;
-                option.textContent = paperName;
-                dropdown.appendChild(option);
-            }
-            selectedFileId = dropdown.value;
-        }
-
-        /**
-         * Loads the content of the specified files.
-         * @param {Array} files An array of file objects.
-         */
-        function loadFilesContent(fileId) {
-            let filesLoaded = 0;
-            const totalFiles = 1; // We load one file at a time now.
-            // document.getElementById('content').innerHTML = `Loading ${totalFiles} files...`; // No content.
-
-            gapi.client.drive.files.get({
-                fileId: fileId,
-                alt: 'media' // Use 'media' to get the file content.
-            }).then(response => {
-                // Store the file content.
-                fileContents[fileId] = response.body;
-                filesLoaded++;
-                if (filesLoaded === totalFiles) {
-                    // All files loaded, display the content.
-                    loadQuizQuestions(response.body);
-                }
-            }).catch(error => {
-                console.error(`Error loading content of file :`, error);
-                questionsContainer.innerHTML = `<div class="error-message">Error loading file. Check console. File ID: ${fileId}</div>`; // Changed
-            });
-        }
-
-        function loadQuizQuestions(fileContent) {
-            try {
-                const jsonData = JSON.parse(fileContent);
-                quizData.push(...jsonData);
-                displayQuizQuestion(currentQuestionIndex);
-            } catch (error) {
-                console.error('Error parsing JSON:', error);
-                questionsContainer.innerHTML = `<div class="error-message">Error: Could not load quiz questions.  Invalid data format.</div>`;
-            }
-        }
-
-
-
-        nameContainer.addEventListener('change', () => {
-            userName = document.getElementById('name-input').value;
+        loadQuizButton.addEventListener('click', () => {
+            const selectedFile = fileDropdown.value;
+            // In a real scenario, you would use server-side logic to fetch the file.
+            // For this example, we'll just redirect to a local file.  This will only work if the files are in the same directory.
+            window.location.href = selectedFile;
         });
-
-        fileDropdown.addEventListener('change', () => {
-            selectedFileId = fileDropdown.value;
-        });
-
-        startQuizButton.addEventListener('click', () => {
-            if (userName.trim() !== "") {
-                instructionsContainer.classList.add('hide');
-                quizForm.classList.remove('hide');
-                startTime = new Date();
-                // loadQuizData(selectedFile);
-                timerContainer.classList.remove('hide');
-                startTimer();
-                startQuizButton.classList.add('hide');
-                nameContainer.classList.add('hide');
-                initClient(); // Initialize the google client
-            } else {
-                alert("Please enter your name before starting the quiz.");
-            }
-        });
-
-
-        function displayQuizQuestion(index) {
-            questionsContainer.innerHTML = '';
-
-            if (index >= quizData.length) {
-                displayQuizResults();
-                return;
-            }
-
-            const questionData = quizData[index];
-            const questionHTML = document.createElement('div');
-            questionHTML.className = 'question-container';
-            questionHTML.innerHTML = `
-                    <h2 class="question-number">Question ${index + 1}</h2>
-                    <p class="question-text">${questionData.question}</p>
-                    <div class="options-container">
-                        ${questionData.options.map(option => `
-                            <label class="option">
-                                <input type="radio" name="question" value="${option}" required>
-                                ${option}
-                            </label>
-                        `).join('')}
-                    </div>
-                    <button type="button" id="next-button" class="${index === quizData.length - 1 ? 'submit-button' : 'next-button'}">
-                        ${index === quizData.length - 1 ? 'Submit Quiz' : 'Next Question'}
-                    </button>
-                `;
-            questionsContainer.appendChild(questionHTML);
-
-            const nextButton = document.getElementById('next-button');
-            nextButton.addEventListener('click', () => {
-                const selectedOption = document.querySelector('input[name="question"]:checked');
-                if (selectedOption) {
-                    userAnswers.push(selectedOption.value);
-                    if (currentQuestionIndex === quizData.length - 1) {
-                        endTime = new Date();
-                        clearInterval(timerInterval);
-                        submitButton.classList.remove('hide');
-                        displayQuizResults();
-                    } else {
-                        currentQuestionIndex++;
-                        displayQuizQuestion(currentQuestionIndex);
-                    }
-                } else {
-                    alert('Please select an answer.');
-                }
-            });
-            if (index === 0) {
-                //  loadFilesContent(selectedFileId); // Load file content when the first question is displayed.
-            }
-        }
-
-        function startTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-            timeRemaining = 900;
-            timerInterval = setInterval(() => {
-                if (timeRemaining > 0) {
-                    timeRemaining--;
-                    const minutes = Math.floor(timeRemaining / 60);
-                    const seconds = timeRemaining % 60;
-                    timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                } else {
-                    clearInterval(timerInterval);
-                    endTime = new Date();
-                    displayQuizResults();
-                    alert("Time's up! Quiz submitted automatically.");
-                }
-            }, 1000);
-        }
-
-
-
-        function displayQuizResults() {
-            if (userAnswers.length !== quizData.length) {
-                return;
-            }
-            const timeTaken = Math.ceil((endTime.getTime() - startTime.getTime()) / 1000 / 60);
-            let score = 0;
-            const submissionTime = new Date();
-
-            quizData.forEach((questionData, index) => {
-                if (userAnswers[index] === questionData.correctAnswer) {
-                    score++;
-                }
-            });
-
-            quizForm.classList.add('hide');
-            resultsContainer.classList.remove('hide');
-            resultsNameDisplay.textContent = userName;
-            resultsScoreDisplay.textContent = `${score} / ${quizData.length}`;
-            resultsTimeDisplay.textContent = timeTaken;
-            resultsSubmissionTimeDisplay.textContent = submissionTime.toLocaleString();
-            currentQuestionIndex = 0;
-
-            // Record results
-            fileContent = `Name: ${userName}, Score: ${score} / ${quizData.length}, Time Taken: ${timeTaken} minutes, Submission Date/Time: ${submissionTime.toLocaleString()}\n`;
-            recordToFile(filename, fileContent);
-        }
-
-        function recordToFile(filename, content) {
-            // This is client-side JavaScript and cannot directly write to a file.
-            //  We'll use a download mechanism to save the data.
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            alert("Results are downloaded in the text file.");
-
-        }
-
-        retakeQuizButton.addEventListener('click', () => {
-            resultsContainer.classList.add('hide');
-            nameContainer.classList.remove('hide');
-            document.getElementById('name-input').value = '';
-            userName = '';
-            userAnswers = [];
-            startTime = null;
-            endTime = null;
-            questionsContainer.innerHTML = '';
-            instructionsContainer.classList.remove('hide');
-            quizForm.classList.add('hide');
-            startQuizButton.classList.remove('hide');
-            nameContainer.classList.remove('hide');
-            timerContainer.classList.add('hide');
-            timeRemaining = 900;
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-            submitButton.classList.add('hide');
-            //  loadQuizData(selectedFile);
-            initClient();
-            currentQuestionIndex = 0;
-            gapiInitialized = false;
-        });
-
-        // Initialize the client when the script loads, but don't assume the user is signed in.
-        window.onload = function() {
-            initClient();
-            populateFileDropdown(); // Populate dropdown on initial load
-        };
     </script>
 </body>
 </html>
