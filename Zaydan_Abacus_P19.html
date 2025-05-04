@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abacus Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .question-container {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            /* Gradient Background */
+            background-image: linear-gradient(to bottom right, #f5f5f5, #e0e0e0); /* Light Grey Gradient */
+        }
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #1e293b;
+            white-space: pre-line;
+            width: 100%;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            background-color: #f9fafb;
+            color: #1f2937;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            margin-bottom: 0.5rem;
+            width: 100%;
+            text-align: left;
+        }
+        .option:hover {
+            background-color: #eff6ff;
+            border-color: #60a5fa;
+            color: #1d4ed8;
+        }
+        .option input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+        .name-input-container {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .name-input-container label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        .name-input-container input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            font-size: 1rem;
+            color: #1f2937;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .name-input-container input[type="text"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .password-input-container {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .password-input-container label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        .password-input-container input[type="password"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            font-size: 1rem;
+            color: #1f2937;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .password-input-container input[type="password"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .instructions-container {
+            margin-bottom: 20px;
+            padding: 1rem;
+            border: 1px solid #f9a8d4;
+            border-radius: 0.5rem;
+            background-color: #fde6f8;
+            color: #831843;
+        }
+        .instructions-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #be123c;
+        }
+        .start-quiz-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            background-color: #3b82f6;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+            margin-top: 1rem;
+        }
+        .start-quiz-button:hover {
+            background-color: #2563eb;
+        }
+        .submit-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            background-color: #3b82f6;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+            margin-top: 1rem;
+        }
+        .submit-button:hover {
+            background-color: #2563eb;
+        }
+        #results-container {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border: 2px solid #6ee7b7; /* Added border */
+            border-radius: 0.5rem;
+            background-color: #f0fdf4;
+            color: #15803d;
+        }
+        #results-container h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #16a34a;
+        }
+        #results-container p {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+        #results-container button {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            background-color: #4ade80;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+        #results-container button:hover {
+            background-color: #22c55e;
+        }
+        .hide {
+            display: none;
+        }
+        .question-number {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 0.5rem;
+            width: 100%;
+            text-align: left;
+        }
+        .next-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            background-color: #f59e0b;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+            margin-top: 1rem;
+        }
+        .next-button:hover {
+            background-color: #ed8936;
+        }
+        .orange-label {
+            color: #f59e0b;
+        }
+        #timer-container {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 1rem;
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(to right, #eff6ff, #f0fdf4); /* Initial Greenish */
+            transition: background-image 60s linear; /* Transition over 15 minutes (900 seconds) */
+        }
+        #file-select-container{
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        #file-select-container label{
+            display: block;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        #file-dropdown{
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            font-size: 1rem;
+            color: #1f2937;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        #file-dropdown:focus{
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .review-container {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #6ee7b7;
+            border-radius: 0.5rem;
+            background-color: #f0fdf4;
+            color: #15803d;
+        }
+        .review-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #16a34a;
+            text-align: center;
+        }
+        .review-question {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+        .review-answer {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            text-align: center;
+        }
+        .correct-answer {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            background-color: #f0fdf4;
+            border: 1px solid #d1d5db;
+            color: #16a34a;
+            font-weight: 600;
+            text-align: center;
+        }
+        .wrong-answer {
+            background-color: #fecaca;
+            color: #b91c1c;
+            border-color: #f87171;
+            text-align: center;
+        }
+        .screenshot-note {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            background-image: linear-gradient(to bottom right, #f0fdf4, #e0f2fe);
+            color: #1e293b;
+            font-size: 1rem;
+            font-weight: 500;
+            border: 1px solid #b0f2e2;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .congratulations-message {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            background-image: linear-gradient(to bottom right, #f0fdf4, #e0f7fa);
+            color: #15803d;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 1px solid #6ee7b7;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .retake-message {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            background-color: #fecaca;
+            color: #1f2937;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 1px solid #f87171;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .option.selected {
+            background-color: #e0f7fa; /* Light blue background */
+            border-color: #87ceeb; /* Light blue border */
+            color: #084298;
+        }
+        .print-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            background-color: #3b82f6;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+            margin-top: 1rem;
+            margin-left: 1rem;
+        }
+        .print-button:hover {
+            background-color: #2563eb;
+        }
+        .review-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        .review-table th, .review-table td {
+            padding: 0.75rem;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .review-table th {
+            font-weight: 600;
+            color: #4b5563;
+            background-color: #f7fafc;
+        }
+        .review-table td {
+            color: #1f2937;
+        }
+        .review-table tr:last-child td {
+            border-bottom: none;
+        }
+        .review-table .correct-answer {
+            color: #16a34a;
+            font-weight: 600;
+            background-color: #f0fdf4;
+        }
+        .review-table .wrong-answer {
+            color: #b91c1c;
+            background-color: #fecaca;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-4">Zaydan - Abacus - Level - 1A Quiz - P19</h1>
+
+        <div class="name-input-container" id="name-container">
+            <label for="name-input">Please enter your name:</label>
+            <input type="text" id="name-input" placeholder="Your Name" required>
+        </div>
+        <div class="password-input-container" id="password-container">
+            <label for="password-input">Please enter the password:</label>
+            <input type="password" id="password-input" placeholder="Password" required>
+        </div>
+        <div id="file-select-container" class="hide">
+            <label for="file-dropdown">Select a data file:</label>
+            <select id="file-dropdown">
+                <option value="Practice_Paper_01.txt">Practice Paper 01</option>
+                <option value="Practice_Paper_02.txt">Practice Paper 02</option>
+                <option value="Practice_Paper_03.txt">Practice Paper 03</option>
+            </select>
+        </div>
+
+        <button type="button" id="start-quiz-button" class="start-quiz-button mt-4">Start Quiz</button>
+
+        <div class="instructions-container" id="instructions-container">
+            <h2 class="instructions-title">Instructions</h2>
+            <p>This quiz has a time limit of 15 minutes. Please answer all questions.</p>
+        </div>
+
+        <div id="timer-container" class="hide">
+            Time Remaining: <span id="timer">15:00</span>
+        </div>
+
+        <form id="quiz-form" class="hide">
+            <div id="questions-container">
+            </div>
+            <button type="submit" class="submit-button hide">Submit Quiz</button>
+        </form>
+
+        <div id="results-container" class="hide">
+            <h2>Quiz Results - P19</h2>
+            <p>Name: <span id="results-name"></span></p>
+            <p>Score: <span id="results-score"></span></p>
+             <p>Percentage: <span id="results-percentage"></span></p>
+            <p>Time Taken: <span id="results-time"></span></p>
+            <p>Submission Date/Time: <span id="results-submission-time"></span></p>
+            <p class="screenshot-note">Please take a screenshot of the Quiz Result and share it with your Dad.</p>
+            <p id="congratulations" class="congratulations-message hide"></p>
+            <p id="retake-message" class="retake-message hide">Please take the quiz again to improve your score.</p>
+            <button id="retake-quiz">Retake Quiz</button>
+            <button id="print-results" class="print-button">Print Results</button>
+        </div>
+        <div id="review-container" class="hide">
+             <h2 class="review-title">Answer Review</h2>
+              <div id="review-questions-container">
+              </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+  {
+    "question": "89\n -03\n -05\n 2",
+    "options": [
+      "83",
+      "73",
+      "63",
+      "None"
+    ],
+    "correctAnswer": "83"
+  },
+  {
+    "question": "37\n -01\n -05\n 06",
+    "options": [
+      "57",
+      "47",
+      "37",
+      "None"
+    ],
+    "correctAnswer": "37"
+  },
+  {
+    "question": "47\n -01\n 03\n -07",
+    "options": [
+      "42",
+      "32",
+      "52",
+      "None"
+    ],
+    "correctAnswer": "42"
+  },
+  {
+    "question": "63\n -01\n -02\n 07",
+    "options": [
+      "67",
+      "97",
+      "77",
+      "None"
+    ],
+    "correctAnswer": "67"
+  },
+  {
+    "question": "73\n -01\n -01\n 11",
+    "options": [
+      "62",
+      "82",
+      "72",
+      "None"
+    ],
+    "correctAnswer": "82"
+  },
+  {
+    "question": "43\n -12\n 03\n -01",
+    "options": [
+      "33",
+      "23",
+      "43",
+      "None"
+    ],
+    "correctAnswer": "33"
+  },
+  {
+    "question": "47\n -02\n -05\n 08",
+    "options": [
+      "48",
+      "68",
+      "98",
+      "None"
+    ],
+    "correctAnswer": "48"
+  },
+  {
+    "question": "67\n -01\n -05\n 03",
+    "options": [
+      "24",
+      "54",
+      "64",
+      "None"
+    ],
+    "correctAnswer": "64"
+  },
+  {
+    "question": "68\n -18\n 12\n 06",
+    "options": [
+      "78",
+      "68",
+      "58",
+      "None"
+    ],
+    "correctAnswer": "68"
+  },
+  {
+    "question": "79\n -01\n -02\n -05",
+    "options": [
+      "41",
+      "71",
+      "61",
+      "None"
+    ],
+    "correctAnswer": "71"
+  },
+  {
+    "question": "67\n -02\n 03\n -06",
+    "options": [
+      "52",
+      "62",
+      "72",
+      "None"
+    ],
+    "correctAnswer": "62"
+  },
+  {
+    "question": "89\n -05\n -02\n 06",
+    "options": [
+      "88",
+      "98",
+      "78",
+      "None"
+    ],
+    "correctAnswer": "88"
+  },
+  {
+    "question": "97\n -01\n -05\n -10",
+    "options": [
+      "41",
+      "81",
+      "71",
+      "None"
+    ],
+    "correctAnswer": "81"
+  },
+  {
+    "question": "49\n -08\n -01\n 06",
+    "options": [
+      "66",
+      "46",
+      "56",
+      "None"
+    ],
+    "correctAnswer": "46"
+  },
+  {
+    "question": "39\n -05\n -04\n 07",
+    "options": [
+      "27",
+      "37",
+      "47",
+      "None"
+    ],
+    "correctAnswer": "37"
+  },
+  {
+    "question": "53\n 06\n -07\n 11",
+    "options": [
+      "63",
+      "23",
+      "73",
+      "None"
+    ],
+    "correctAnswer": "63"
+  },
+  {
+    "question": "89\n -05\n -03\n 06",
+    "options": [
+      "87",
+      "77",
+      "97",
+      "None"
+    ],
+    "correctAnswer": "87"
+  },
+  {
+    "question": "48\n 01\n -05\n -02",
+    "options": [
+      "32",
+      "42",
+      "72",
+      "None"
+    ],
+    "correctAnswer": "42"
+  },
+  {
+    "question": "39\n -01\n -07\n 03",
+    "options": [
+      "64",
+      "84",
+      "34",
+      "None"
+    ],
+    "correctAnswer": "34"
+  },
+  {
+    "question": "17\n 31\n -22\n 12",
+    "options": [
+      "48",
+      "38",
+      "58",
+      "None"
+    ],
+    "correctAnswer": "38"
+  },
+  {
+    "question": "49\n -05\n -04\n -10",
+    "options": [
+      "30",
+      "10",
+      "20",
+      "None"
+    ],
+    "correctAnswer": "30"
+  },
+  {
+    "question": "86\n -05\n -01\n 08",
+    "options": [
+      "38",
+      "68",
+      "88",
+      "None"
+    ],
+    "correctAnswer": "88"
+  },
+  {
+    "question": "59\n -01\n -02\n -05",
+    "options": [
+      "51",
+      "11",
+      "61",
+      "None"
+    ],
+    "correctAnswer": "51"
+  },
+  {
+    "question": "36\n -11\n -05\n 4",
+    "options": [
+      "24",
+      "34",
+      "44",
+      "None"
+    ],
+    "correctAnswer": "24"
+  },
+  {
+    "question": "89\n -01\n -07\n 03",
+    "options": [
+      "94",
+      "84",
+      "64",
+      "None"
+    ],
+    "correctAnswer": "84"
+  },
+  {
+    "question": "89\n -01\n -06\n 11",
+    "options": [
+      "53",
+      "93",
+      "83",
+      "None"
+    ],
+    "correctAnswer": "93"
+  },
+  {
+    "question": "64\n -02\n -01\n 06",
+    "options": [
+      "57",
+      "77",
+      "67",
+      "None"
+    ],
+    "correctAnswer": "67"
+  },
+  {
+    "question": "49\n -05\n -02\n 06",
+    "options": [
+      "58",
+      "48",
+      "38",
+      "None"
+    ],
+    "correctAnswer": "48"
+  },
+  {
+    "question": "39\n -12\n -16\n 07",
+    "options": [
+      "38",
+      "28",
+      "18",
+      "None"
+    ],
+    "correctAnswer": "18"
+  },
+  {
+    "question": "74\n -02\n -01\n 06",
+    "options": [
+      "97",
+      "77",
+      "57",
+      "None"
+    ],
+    "correctAnswer": "77"
+  },
+  {
+    "question": "49\n -12\n -06\n 03",
+    "options": [
+      "24",
+      "34",
+      "44",
+      "None"
+    ],
+    "correctAnswer": "34"
+  },
+  {
+    "question": "68\n -12\n 13\n -07",
+    "options": [
+      "52",
+      "42",
+      "62",
+      "None"
+    ],
+    "correctAnswer": "62"
+  },
+  {
+    "question": "56\n 12\n -11\n -06",
+    "options": [
+      "51",
+      "61",
+      "81",
+      "None"
+    ],
+    "correctAnswer": "51"
+  },
+  {
+    "question": "49\n -03\n -05\n 51",
+    "options": [
+      "72",
+      "82",
+      "92",
+      "None"
+    ],
+    "correctAnswer": "92"
+  },
+  {
+    "question": "22\n -01\n 07\n -11",
+    "options": [
+      "27",
+      "17",
+      "47",
+      "None"
+    ],
+    "correctAnswer": "17"
+  },
+  {
+    "question": "59\n 10\n -12\n 11",
+    "options": [
+      "58",
+      "68",
+      "78",
+      "None"
+    ],
+    "correctAnswer": "68"
+  },
+  {
+    "question": "49\n -12\n -05\n 06",
+    "options": [
+      "48",
+      "68",
+      "38",
+      "None"
+    ],
+    "correctAnswer": "38"
+  },
+  {
+    "question": "48\n -11\n 51\n -07",
+    "options": [
+      "91",
+      "71",
+      "81",
+      "None"
+    ],
+    "correctAnswer": "81"
+  },
+  {
+    "question": "49\n -13\n -05\n 06",
+    "options": [
+      "47",
+      "57",
+      "37",
+      "None"
+    ],
+    "correctAnswer": "37"
+  },
+  {
+    "question": "39\n -12\n -06\n 01",
+    "options": [
+      "32",
+      "22",
+      "42",
+      "None"
+    ],
+    "correctAnswer": "22"
+  },
+  {
+    "question": "29\n 10\n -16\n 05",
+    "options": [
+      "58",
+      "28",
+      "68",
+      "None"
+    ],
+    "correctAnswer": "28"
+  },
+  {
+    "question": "66\n -11\n 33\n -55",
+    "options": [
+      "43",
+      "23",
+      "33",
+      "None"
+    ],
+    "correctAnswer": "33"
+  },
+  {
+    "question": "59\n -07\n 05\n -06",
+    "options": [
+      "51",
+      "41",
+      "61",
+      "None"
+    ],
+    "correctAnswer": "51"
+  },
+  {
+    "question": "39\n -11\n -12\n -15",
+    "options": [
+      "9",
+      "1",
+      "2",
+      "None"
+    ],
+    "correctAnswer": "1"
+  },
+  {
+    "question": "87\n -05\n -11\n 08",
+    "options": [
+      "69",
+      "79",
+      "89",
+      "None"
+    ],
+    "correctAnswer": "79"
+  },
+  {
+    "question": "59\n -04\n -05\n 07",
+    "options": [
+      "57",
+      "47",
+      "67",
+      "None"
+    ],
+    "correctAnswer": "57"
+  },
+  {
+    "question": "57\n 12\n -08\n 11",
+    "options": [
+      "83",
+      "62",
+      "72",
+      "None"
+    ],
+    "correctAnswer": "72"
+  },
+  {
+    "question": "88\n -25\n -01\n 06",
+    "options": [
+      "68",
+      "58",
+      "78",
+      "None"
+    ],
+    "correctAnswer": "68"
+  },
+  {
+    "question": "58\n -03\n 13\n -07",
+    "options": [
+      "71",
+      "61",
+      "81",
+      "None"
+    ],
+    "correctAnswer": "61"
+  },
+  {
+    "question": "47\n -05\n -02\n 04",
+    "options": [
+      "74",
+      "44",
+      "64",
+      "None"
+    ],
+    "correctAnswer": "44"
+  },
+  {
+    "question": "58\n 11\n -07\n 06",
+    "options": [
+      "78",
+      "98",
+      "68",
+      "None"
+    ],
+    "correctAnswer": "68"
+  },
+  {
+    "question": "82\n -01\n 06\n -12",
+    "options": [
+      "65",
+      "55",
+      "75",
+      "None"
+    ],
+    "correctAnswer": "75"
+  },
+  {
+    "question": "23\n 11\n 15\n -06",
+    "options": [
+      "23",
+      "43",
+      "33",
+      "None"
+    ],
+    "correctAnswer": "43"
+  },
+  {
+    "question": "78\n -03\n -05\n 06",
+    "options": [
+      "56",
+      "76",
+      "86",
+      "None"
+    ],
+    "correctAnswer": "76"
+  },
+  {
+    "question": "27\n -02\n 03\n -06",
+    "options": [
+      "42",
+      "22",
+      "32",
+      "None"
+    ],
+    "correctAnswer": "22"
+  },
+  {
+    "question": "77\n -05\n -02\n 03",
+    "options": [
+      "83",
+      "63",
+      "73",
+      "None"
+    ],
+    "correctAnswer": "73"
+  },
+  {
+    "question": "58\n -03\n 02\n 11",
+    "options": [
+      "68",
+      "78",
+      "98",
+      "None"
+    ],
+    "correctAnswer": "68"
+  },
+  {
+    "question": "87\n -02\n -05\n 06",
+    "options": [
+      "76",
+      "86",
+      "56",
+      "None"
+    ],
+    "correctAnswer": "86"
+  },
+  {
+    "question": "69\n -03\n -05\n 07",
+    "options": [
+      "68",
+      "78",
+      "48",
+      "None"
+    ],
+    "correctAnswer": "68"
+  },
+  {
+    "question": "28\n -02\n -05\n 07",
+    "options": [
+      "28",
+      "38",
+      "78",
+      "None"
+    ],
+    "correctAnswer": "28"
+  },
+  {
+    "question": "84\n -03\n 06\n -02",
+    "options": [
+      "75",
+      "85",
+      "55",
+      "None"
+    ],
+    "correctAnswer": "85"
+  },
+  {
+    "question": "78\n -02\n 12\n -06",
+    "options": [
+      "72",
+      "82",
+      "62",
+      "None"
+    ],
+    "correctAnswer": "82"
+  },
+  {
+    "question": "58\n -02\n 12\n -06",
+    "options": [
+      "72",
+      "62",
+      "82",
+      "None"
+    ],
+    "correctAnswer": "62"
+  },
+  {
+    "question": "49\n -02\n -06\n 07",
+    "options": [
+      "68",
+      "48",
+      "58",
+      "None"
+    ],
+    "correctAnswer": "48"
+  },
+  {
+    "question": "69\n -02\n 11\n -07",
+    "options": [
+      "71",
+      "61",
+      "91",
+      "None"
+    ],
+    "correctAnswer": "71"
+  },
+  {
+    "question": "74\n -01\n -02\n 06",
+    "options": [
+      "67",
+      "77",
+      "97",
+      "None"
+    ],
+    "correctAnswer": "77"
+  },
+  {
+    "question": "44\n -03\n 06\n 51",
+    "options": [
+      "78",
+      "58",
+      "98",
+      "None"
+    ],
+    "correctAnswer": "98"
+  },
+  {
+    "question": "57\n -06\n 11\n 17",
+    "options": [
+      "59",
+      "79",
+      "49",
+      "None"
+    ],
+    "correctAnswer": "79"
+  },
+  {
+    "question": "78\n -02\n -05\n 12",
+    "options": [
+      "83",
+      "73",
+      "93",
+      "None"
+    ],
+    "correctAnswer": "83"
+  },
+  {
+    "question": "86\n -05\n 06\n 11",
+    "options": [
+      "98",
+      "88",
+      "78",
+      "None"
+    ],
+    "correctAnswer": "98"
+  },
+  {
+    "question": "39\n -03\n -11\n 22",
+    "options": [
+      "47",
+      "77",
+      "67",
+      "None"
+    ],
+    "correctAnswer": "47"
+  },
+  {
+    "question": "39\n -04\n -05\n 11",
+    "options": [
+      "31",
+      "41",
+      "51",
+      "None"
+    ],
+    "correctAnswer": "41"
+  },
+  {
+    "question": "89\n -05\n -02\n 16",
+    "options": [
+      "88",
+      "48",
+      "98",
+      "None"
+    ],
+    "correctAnswer": "98"
+  },
+  {
+    "question": "64\n 04\n -07\n 12",
+    "options": [
+      "54",
+      "64",
+      "74",
+      "None"
+    ],
+    "correctAnswer": "74"
+  },
+  {
+    "question": "77\n 11\n -06\n 07",
+    "options": [
+      "89",
+      "79",
+      "69",
+      "None"
+    ],
+    "correctAnswer": "89"
+  },
+  {
+    "question": "47\n -01\n -05\n 08",
+    "options": [
+      "39",
+      "49",
+      "69",
+      "None"
+    ],
+    "correctAnswer": "49"
+  },
+  {
+    "question": "89\n -02\n -06\n -51",
+    "options": [
+      "40",
+      "60",
+      "30",
+      "None"
+    ],
+    "correctAnswer": "30"
+  },
+  {
+    "question": "22\n 22\n -23\n -11",
+    "options": [
+      "30",
+      "10",
+      "40",
+      "None"
+    ],
+    "correctAnswer": "10"
+  },
+  {
+    "question": "53\n 21\n 15\n -03",
+    "options": [
+      "86",
+      "76",
+      "96",
+      "None"
+    ],
+    "correctAnswer": "86"
+  },
+  {
+    "question": "84\n -02\n 10\n 06",
+    "options": [
+      "98",
+      "78",
+      "68",
+      "None"
+    ],
+    "correctAnswer": "98"
+  },
+  {
+    "question": "39\n 60\n -03\n -05",
+    "options": [
+      "71",
+      "81",
+      "91",
+      "None"
+    ],
+    "correctAnswer": "91"
+  },
+  {
+    "question": "33\n 01\n 15\n -06",
+    "options": [
+      "33",
+      "53",
+      "43",
+      "None"
+    ],
+    "correctAnswer": "43"
+  },
+  {
+    "question": "81\n 12\n 05\n -03",
+    "options": [
+      "55",
+      "75",
+      "95",
+      "None"
+    ],
+    "correctAnswer": "95"
+  },
+  {
+    "question": "35\n 12\n -06\n -11",
+    "options": [
+      "30",
+      "40",
+      "50",
+      "None"
+    ],
+    "correctAnswer": "30"
+  },
+  {
+    "question": "35\n 12\n -21\n -11",
+    "options": [
+      "15",
+      "25",
+      "35",
+      "None"
+    ],
+    "correctAnswer": "15"
+  },
+  {
+    "question": "53\n -02\n 15\n -06",
+    "options": [
+      "60",
+      "50",
+      "70",
+      "None"
+    ],
+    "correctAnswer": "60"
+  },
+  {
+    "question": "49\n -02\n -05\n 51",
+    "options": [
+      "93",
+      "63",
+      "73",
+      "None"
+    ],
+    "correctAnswer": "93"
+  },
+  {
+    "question": "54\n -02\n 06\n 11",
+    "options": [
+      "49",
+      "59",
+      "69",
+      "None"
+    ],
+    "correctAnswer": "69"
+  },
+  {
+    "question": "32\n 15\n -12\n 03",
+    "options": [
+      "38",
+      "48",
+      "68",
+      "None"
+    ],
+    "correctAnswer": "38"
+  },
+  {
+    "question": "42\n 51\n -12\n 03",
+    "options": [
+      "74",
+      "84",
+      "94",
+      "None"
+    ],
+    "correctAnswer": "84"
+  },
+  {
+    "question": "76\n -01\n -05\n 09",
+    "options": [
+      "69",
+      "49",
+      "79",
+      "None"
+    ],
+    "correctAnswer": "79"
+  },
+  {
+    "question": "88\n -02\n 10\n 01",
+    "options": [
+      "47",
+      "67",
+      "97",
+      "None"
+    ],
+    "correctAnswer": "97"
+  },
+  {
+    "question": "23\n -01\n 20\n 05",
+    "options": [
+      "67",
+      "57",
+      "47",
+      "None"
+    ],
+    "correctAnswer": "47"
+  },
+  {
+    "question": "90\n -20\n 01\n 05",
+    "options": [
+      "56",
+      "76",
+      "86",
+      "None"
+    ],
+    "correctAnswer": "76"
+  },
+  {
+    "question": "49\n -02\n 01\n -02",
+    "options": [
+      "56",
+      "66",
+      "46",
+      "None"
+    ],
+    "correctAnswer": "46"
+  },
+  {
+    "question": "56\n -05\n 21\n 06",
+    "options": [
+      "78",
+      "68",
+      "28",
+      "None"
+    ],
+    "correctAnswer": "78"
+  },
+  {
+    "question": "57\n -05\n 22\n 10",
+    "options": [
+      "74",
+      "64",
+      "84",
+      "None"
+    ],
+    "correctAnswer": "84"
+  },
+  {
+    "question": "67\n -07\n 16\n 03",
+    "options": [
+      "79",
+      "69",
+      "49",
+      "None"
+    ],
+    "correctAnswer": "79"
+  },
+  {
+    "question": "35\n 04\n 10\n -03",
+    "options": [
+      "56",
+      "26",
+      "46",
+      "None"
+    ],
+    "correctAnswer": "46"
+  },
+  {
+    "question": "35\n 04\n -06\n -03",
+    "options": [
+      "30",
+      "50",
+      "40",
+      "None"
+    ],
+    "correctAnswer": "30"
+  }
+];
+
+        const nameContainer = document.getElementById('name-container');
+        const passwordContainer = document.getElementById('password-container');
+        const quizForm = document.getElementById('quiz-form');
+        const questionsContainer = document.getElementById('questions-container');
+        const resultsContainer = document.getElementById('results-container');
+        const resultsNameDisplay = document.getElementById('results-name');
+        const resultsScoreDisplay = document.getElementById('results-score');
+        const resultsTimeDisplay = document.getElementById('results-time');
+        const retakeQuizButton = document.getElementById('retake-quiz');
+        const instructionsContainer = document.getElementById('instructions-container');
+        const startQuizButton = document.getElementById('start-quiz-button');
+        const timerDisplay = document.getElementById('timer');
+        const timerContainer = document.getElementById('timer-container');
+        const submitButton = document.querySelector('.submit-button');
+        const resultsSubmissionTimeDisplay = document.getElementById('results-submission-time');
+        const fileDropdown = document.getElementById('file-dropdown');
+        const fileSelectContainer = document.getElementById('file-select-container');
+        const reviewContainer = document.getElementById('review-container');
+        const reviewQuestionsContainer = document.getElementById('review-questions-container');
+        const resultsPercentageDisplay = document.getElementById('results-percentage');
+         const congratulationsMessage = document.getElementById('congratulations');
+        const retakeMessage = document.getElementById('retake-message');
+        const printButton = document.getElementById('print-results');
+
+
+        let startTime;
+        let endTime;
+        let userName = "";
+        let userAnswers = [];
+        let currentQuestionIndex = 0;
+        let timeRemaining = 900; // 15 minutes in seconds
+        const filename = "Result/quiz_results.txt";
+        let fileContent = "";
+        let timerInterval;
+        let selectedFile;
+        const correctPassword = "Zaydan@123";
+
+
+        // Load saved session data
+        if (localStorage.getItem('quizSession')) {
+            const sessionData = JSON.parse(localStorage.getItem('quizSession'));
+            userName = sessionData.userName;
+            userAnswers = sessionData.userAnswers;
+            currentQuestionIndex = sessionData.currentQuestionIndex;
+            timeRemaining = sessionData.timeRemaining;
+            startTime = sessionData.startTime ? new Date(sessionData.startTime) : null;
+             if(sessionData.selectedFile){
+                selectedFile =sessionData.selectedFile;
+            }}
+
+        nameContainer.addEventListener('change', () => {
+            userName = document.getElementById('name-input').value;
+            // Save name to session
+            updateSession({ userName: userName });
+        });
+
+        if (fileSelectContainer) {
+            fileDropdown.addEventListener('change', () => {
+                selectedFile = fileDropdown.value;
+                updateSession({selectedFile: selectedFile});
+            });
+        }
+
+        startQuizButton.addEventListener('click', () => {
+            const password = document.getElementById('password-input').value;
+            if (userName.trim() !== "" && password === correctPassword) {
+                instructionsContainer.classList.add('hide');
+                quizForm.classList.remove('hide');
+                startTime = new Date(); // Initialize start time here
+                timeRemaining = 900;  // Reset timer
+                timerContainer.classList.remove('hide');
+                startTimer();
+                startQuizButton.classList.add('hide');
+                nameContainer.classList.add('hide');
+                passwordContainer.classList.add('hide');
+                 if (fileSelectContainer) {
+                    fileSelectContainer.classList.add('hide');
+                }
+                displayQuizQuestion(currentQuestionIndex);
+            } else if (userName.trim() === "") {
+                alert("Please enter your name before starting the quiz.");
+            } else {
+                alert("Incorrect password. Please try again.");
+            }
+        });
+
+        function displayQuizQuestion(index) {
+            questionsContainer.innerHTML = '';
+
+if (index >= quizData.length) {
+                endTime = new Date();
+                clearInterval(timerInterval);displayQuizResults();
+                return;
+            }
+
+            const questionData = quizData[index];
+            const questionHTML = document.createElement('div');
+            questionHTML.className = 'question-container';
+            questionHTML.innerHTML = `
+                <h2 class="question-number">Question ${index + 1}</h2>
+                <p class="question-text">${questionData.question}</p>
+                <div class="options-container">
+                    ${shuffleArray(questionData.options).map(option => {
+                         const isSelected = userAnswers[index] === option;
+                        return `
+                        <label class="option ${isSelected ? 'selected' : ''}">
+                            <input type="radio" name="question" value="${option}" ${isSelected ? 'checked' : ''} required>
+                            ${option}
+                        </label>
+                    `}).join('')}
+                </div>
+                <button type="button" id="next-button" class="${index === quizData.length - 1 ? 'submit-button' : 'next-button'}">
+                    ${index === quizData.length - 1 ? 'Submit Quiz' : 'Next Question'}
+                </button>
+            `;
+            questionsContainer.appendChild(questionHTML);
+
+            const nextButton = document.getElementById('next-button');
+            nextButton.addEventListener('click', () => {
+                const selectedOption = document.querySelector('input[name="question"]:checked');
+                if (selectedOption) {
+                    userAnswers[index] = selectedOption.value;
+                    updateSession({ userAnswers: userAnswers });
+                    if (currentQuestionIndex === quizData.length - 1) {
+                        endTime = new Date();
+                        clearInterval(timerInterval);
+                        submitButton.classList.remove('hide');
+                        displayQuizResults();
+                    } else {
+                        currentQuestionIndex++;
+                        displayQuizQuestion(currentQuestionIndex);
+                    }
+                } else {
+                    alert('Please select an answer.');
+                }
+                // Remove selected class from all options
+                document.querySelectorAll('.option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                // Add selected class to the selected option's label
+                if (selectedOption) {
+                    selectedOption.closest('.option').classList.add('selected');
+                }
+            });
+             const radioInputs = questionHTML.querySelectorAll('input[type="radio"]');
+            radioInputs.forEach(input => {
+                input.addEventListener('change', (event) => {
+                    // Remove selected class from all options
+                    document.querySelectorAll('.option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    // Add selected class to the parent label of the selected input
+                    event.target.closest('.option').classList.add('selected');
+                });
+            });
+        }
+
+        function startTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            if (!timeRemaining) {
+                timeRemaining = 900;
+            }
+            timerDisplay.textContent = `${Math.floor(timeRemaining / 60)
+                .toString()
+                .padStart(2, '0')}:${(timeRemaining % 60).toString().padStart(2, '0')}`;
+            timerInterval = setInterval(() => {
+                if (timeRemaining > 0) {
+                    timeRemaining--;
+                    const minutes = Math.floor(timeRemaining / 60);
+                    const seconds = timeRemaining % 60;
+                    timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    updateTimerBackground(timeRemaining);
+                    updateSession({ timeRemaining: timeRemaining });
+                } else {
+                    clearInterval(timerInterval);
+                    endTime = new Date();
+                    displayQuizResults();
+                    alert("Time's up! Quiz submitted automatically.");
+                }
+            }, 1000);
+        }
+
+        function updateTimerBackground(timeLeft) {
+            const timerContainer = document.getElementById('timer-container');
+            // Calculate the percentage oftime remaining (0 to 1).
+            const timePercentage = timeLeft / 900;
+
+            // Ensure the percentage is within the valid range (0 to 1).
+            const clampedPercentage = Math.max(0, Math.min(1, timePercentage));
+
+            // Define the start and end colors as HSL values
+             const startColor = [120, 100, 90];  // Light green (HSL)
+            const endColor = [0, 100, 65];    // Red (HSL)
+
+            // Calculate the intermediate color in HSL
+             const hue = startColor[0] + (endColor[0] - startColor[0]) * (1 - clampedPercentage);
+            const saturation = startColor[1] + (endColor[1] - startColor[1]) * (1 - clampedPercentage);
+            const lightness = startColor[2] + (endColor[2] - startColor[2]) * (1 - clampedPercentage);
+
+            const backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+            timerContainer.style.backgroundImage = `linear-gradient(to right, ${backgroundColor},${backgroundColor})`;
+        }
+
+        function displayQuizResults() {
+            if (userAnswers.length !== quizData.length) {
+                return;
+            }
+            const timeTakenInSeconds = Math.ceil((endTime.getTime() - startTime.getTime()) / 1000);
+            const minutes = Math.floor(timeTakenInSeconds / 60);
+            const seconds = timeTakenInSeconds % 60;
+            const timeTaken = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            let score = 0;
+            const submissionTime = new Date();
+
+            quizData.forEach((questionData, index) => {
+                if (userAnswers[index] === questionData.correctAnswer) {
+                    score++;
+                }
+            });
+
+            const percentage = (score / quizData.length) * 100;
+
+            quizForm.classList.add('hide');
+            resultsContainer.classList.remove('hide');
+            resultsNameDisplay.textContent = userName;
+            resultsScoreDisplay.textContent = `${score} / ${quizData.length}`;
+             resultsPercentageDisplay.textContent = `${percentage.toFixed(2)}%`;
+            resultsTimeDisplay.textContent = timeTaken;
+            resultsSubmissionTimeDisplay.textContent = submissionTime.toLocaleString();
+            currentQuestionIndex = 0;
+            localStorage.removeItem('quizSession');
+
+            fileContent = `Name: ${userName}, Score: ${score} / ${quizData.length}, Percentage: ${percentage.toFixed(2)}%, Time Taken: ${timeTaken} minutes, Submission Date/Time: ${submissionTime.toLocaleString()}\n`;
+            recordToFile(filename, fileContent);
+             if (percentage > 95) {
+                congratulationsMessage.textContent = "Congratulations! Excellent performance!";
+                congratulationsMessage.classList.remove('hide');
+                retakeMessage.classList.add('hide');
+            } else {
+                congratulationsMessage.classList.add('hide');
+                retakeMessage.classList.remove('hide');
+            }
+            displayReview();
+        }
+
+        function recordToFile(filename, content) {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert("Results are downloaded in the text file.");
+        }
+
+        retakeQuizButton.addEventListener('click', () => {
+            resultsContainer.classList.add('hide');
+            nameContainer.classList.remove('hide');
+            passwordContainer.classList.remove('hide');
+            document.getElementById('name-input').value = '';
+            document.getElementById('password-input').value = '';
+            userName = '';
+            userAnswers = [];
+            startTime = null;
+            endTime = null;
+            questionsContainer.innerHTML = '';
+            instructionsContainer.classList.remove('hide');
+            quizForm.classList.add('hide');
+            startQuizButton.classList.remove('hide');
+            nameContainer.classList.remove('hide');
+            timerContainer.classList.add('hide');
+            timeRemaining = 900;
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            submitButton.classList.add('hide');
+            currentQuestionIndex = 0;
+            reviewContainer.classList.add('hide');
+            reviewQuestionsContainer.innerHTML = '';
+            localStorage.removeItem('quizSession');
+            startTimer(); // Reset and start the timer
+            displayQuizQuestion(currentQuestionIndex);
+        });
+
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function updateSession(data) {
+            const sessionData = Object.assign({
+                userName: userName,
+                userAnswers: userAnswers,
+                currentQuestionIndex: currentQuestionIndex,
+                timeRemaining: timeRemaining,
+                startTime: startTime,
+                selectedFile: selectedFile
+            }, data);
+            localStorage.setItem('quizSession', JSON.stringify(sessionData));
+        }
+
+        function displayReview() {
+            reviewContainer.classList.remove('hide');
+            reviewQuestionsContainer.innerHTML = '';
+
+            const reviewTable = document.createElement('table');
+            reviewTable.className = 'review-table';
+
+            const headerRow = reviewTable.insertRow();
+            const questionHeader = document.createElement('th');
+            questionHeader.textContent = 'Question';
+            const yourAnswerHeader = document.createElement('th');
+            yourAnswerHeader.textContent = 'Your Answer';
+            const correctAnswerHeader = document.createElement('th');
+            correctAnswerHeader.textContent = 'Correct Answer';
+            headerRow.appendChild(questionHeader);
+            headerRow.appendChild(yourAnswerHeader);
+            headerRow.appendChild(correctAnswerHeader);
+
+            quizData.forEach((questionData, index) => {
+                const row = reviewTable.insertRow();
+                const questionCell = row.insertCell();
+                const yourAnswerCell = row.insertCell();
+                const correctAnswerCell = row.insertCell();
+
+                questionCell.textContent = questionData.question;
+                yourAnswerCell.textContent = userAnswers[index] || '-';
+                correctAnswerCell.textContent = questionData.correctAnswer;
+
+                if (userAnswers[index] !== questionData.correctAnswer) {
+                    yourAnswerCell.classList.add('wrong-answer');
+                } else {
+                    yourAnswerCell.classList.add('correct-answer');
+                }
+                correctAnswerCell.classList.add('correct-answer');
+            });
+
+            reviewQuestionsContainer.appendChild(reviewTable);
+        }
+
+
+
+        printButton.addEventListener('click', () => {
+            window.print();
+        });
+
+        // On load, check for existing session data
+        if (localStorage.getItem('quizSession')) {
+            const sessionData = JSON.parse(localStorage.getItem('quizSession'));
+            userName = sessionData.userName;
+            userAnswers = sessionData.userAnswers;
+            currentQuestionIndex = sessionData.currentQuestionIndex;
+            timeRemaining = sessionData.timeRemaining;
+            startTime = sessionData.startTime ? new Date(sessionData.startTime) : null;
+             if(sessionData.selectedFile){
+                selectedFile = sessionData.selectedFile;
+            }
+
+            // Restore UI based on session data
+            if (userName) {
+                document.getElementById('name-input').value = userName;
+                nameContainer.classList.add('hide');
+                passwordContainer.classList.add('hide');
+                 if (fileSelectContainer) {
+                    fileSelectContainer.classList.add('hide');
+                }
+                startQuizButton.classList.add('hide');
+                instructionsContainer.classList.add('hide');
+                quizForm.classList.remove('hide');
+                timerContainer.classList.remove('hide');
+                startTimer();
+                displayQuizQuestion(currentQuestionIndex);
+            }
+        }
+    </script>
+</body>
+</html>
